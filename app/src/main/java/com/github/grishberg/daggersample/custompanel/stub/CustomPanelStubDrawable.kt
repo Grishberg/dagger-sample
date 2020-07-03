@@ -13,7 +13,7 @@ class CustomPanelStubDrawable @Inject constructor(
     val boundHeight = dimension.iconSize + dimension.textSize + dimension.textTopPadding
 
     init {
-        bgPaint.color = Color.GREEN
+        bgPaint.color = Color.GRAY
     }
 
     override fun onBoundsChange(bounds: Rect) {

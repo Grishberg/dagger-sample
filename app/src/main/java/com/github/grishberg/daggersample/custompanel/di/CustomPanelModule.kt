@@ -3,12 +3,16 @@ package com.github.grishberg.daggersample.custompanel.di
 import android.app.Activity
 import com.github.grishberg.daggersample.custompanel.common.DimensionProvider
 import com.github.grishberg.daggersample.custompanel.panel.CustomPanelView
+import com.github.grishberg.daggersample.custompanel.stub.CachedBitmapRepository
 import dagger.Module
 import dagger.Provides
 
 
 @Module
-class CustomPanelModule(private val activity: Activity) {
+class CustomPanelModule(
+    private val activity: Activity,
+    private val cachedBitmapRepository: CachedBitmapRepository
+) {
 
     @CustomPanelScope
     @Provides
@@ -19,4 +23,8 @@ class CustomPanelModule(private val activity: Activity) {
     @CustomPanelScope
     @Provides
     fun provideActivity(): Activity = activity
+
+    @CustomPanelScope
+    @Provides
+    fun provideCachedBitmapRepository(): CachedBitmapRepository = cachedBitmapRepository
 }

@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
         val component = DaggerCustomPanelComponent
             .builder()
-            .customPanelModule(CustomPanelModule(this))
+            .customPanelModule(CustomPanelModule(this, App.cacheRepository()))
             .build()
         val controller = component.getPanelController()
         val content = findViewById<ViewGroup>(R.id.content)

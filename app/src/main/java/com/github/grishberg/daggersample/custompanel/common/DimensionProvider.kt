@@ -1,4 +1,12 @@
 package com.github.grishberg.daggersample.custompanel.common
 
-class DimensionProvider {
+import android.app.Activity
+import com.github.grishberg.daggersample.R
+import javax.inject.Inject
+
+class DimensionProvider @Inject constructor(activity: Activity) {
+    val iconSize = activity.resources.getDimensionPixelSize(R.dimen.panel_icons_size)
+    val textSize = activity.resources.getDimensionPixelSize(R.dimen.panel_text_size)
+    val textTopPadding = activity.resources.getDimensionPixelSize(R.dimen.panel_text_top_padding)
+    val stubCornerRadius = activity.resources.getDimension(R.dimen.panel_stub_corner_radius)
 }

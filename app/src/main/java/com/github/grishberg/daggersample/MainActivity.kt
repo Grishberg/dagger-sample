@@ -1,12 +1,11 @@
 package com.github.grishberg.daggersample
 
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewStub
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import com.github.grishberg.daggersample.custompanel.di.CustomPanelModule
 import com.github.grishberg.daggersample.custompanel.di.DaggerCustomPanelComponent
 
 class MainActivity : AppCompatActivity() {
@@ -14,16 +13,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolbar))
 
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-
-        val panelStub = findViewById<ViewStub>(R.id.panelStub)
-        val controller = DaggerCustomPanelComponent.create().getController()
-        controller.init(panelStub)
+        val component = DaggerCustomPanelComponent
+            .builder()
+            .customPanelModule(CustomPanelModule(this))
+            .build()
+        val controller = component.getPanelController()
+        val content = findViewById<ViewGroup>(R.id.content)
+        controller.init(content, 2)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

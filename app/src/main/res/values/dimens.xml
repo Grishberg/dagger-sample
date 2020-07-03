@@ -1,3 +1,8 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="panel_icons_size">60dp</dimen>
+    <dimen name="panel_text_size">20sp</dimen>
+    <dimen name="panel_text_top_padding">16dp</dimen>
+    <dimen name="panel_stub_corner_radius">8dp</dimen>
+    <dimen name="panel_side_padding">8dp</dimen>
 </resources>

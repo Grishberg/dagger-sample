@@ -1,18 +1,47 @@
 package com.github.grishberg.daggersample
 
 import android.os.Bundle
+import android.view.Choreographer
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
+import com.github.grishberg.daggersample.custompanel.common.PerformanceEvents
 import com.github.grishberg.daggersample.custompanel.di.CustomPanelModule
 import com.github.grishberg.daggersample.custompanel.di.DaggerCustomPanelComponent
 
 class MainActivity : AppCompatActivity() {
+    private var isWarm = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        isWarm = savedInstanceState == null
+        if (isWarm) {
+            App.performance().markWarmStart()
+        }
+        App.performance().recordEventFromAppStart(PerformanceEvents.ACTIVITY_ON_CREATE)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val rootView = window.decorView.findViewById<View>(android.R.id.content)
+        rootView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                App.performance().recordEventFromAppStart(PerformanceEvents.ON_PREDRAW)
+                rootView.viewTreeObserver.removeOnPreDrawListener(this)
+                return true
+            }
+        })
+
+        val drawListener = object : ViewTreeObserver.OnDrawListener {
+            override fun onDraw() {
+                Choreographer.getInstance().postFrameCallback {
+                    App.performance().recordEventFromAppStart(PerformanceEvents.ON_DRAW)
+                    rootView.viewTreeObserver.removeOnDrawListener(this)
+                }
+            }
+        }
+        rootView.viewTreeObserver.addOnDrawListener(drawListener)
 
         val component = DaggerCustomPanelComponent
             .builder()

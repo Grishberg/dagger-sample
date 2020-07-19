@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.grishberg.daggersample.custompanel.common.PerformanceEvents
 import com.github.grishberg.daggersample.custompanel.di.CustomPanelModule
 import com.github.grishberg.daggersample.custompanel.di.DaggerCustomPanelComponent
+import com.github.grishberg.daggersample.custompanel.di.DaggerFirstFrameComponent
+import com.github.grishberg.daggersample.custompanel.di.FirstFrameModule
 
 class MainActivity : AppCompatActivity() {
     private var isWarm = true
@@ -42,9 +44,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
         rootView.viewTreeObserver.addOnDrawListener(drawListener)
+        val firstFrameComponent = DaggerFirstFrameComponent
+            .builder()
+            .firstFrameModule(FirstFrameModule(this))
+            .build()
 
         val component = DaggerCustomPanelComponent
             .builder()
+            .firstFrameComponent(firstFrameComponent)
             .customPanelModule(CustomPanelModule(this, App.cacheRepository()))
             .build()
         val controller = component.getPanelController()

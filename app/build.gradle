@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+def profilingEnabled = project.hasProperty("profilingEnabled")
+
 android {
     compileSdkVersion 28
 
@@ -16,9 +18,20 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // ./gradlew assembleRelease
+    signingConfigs {
+        release {
+            storeFile file("../keys/perf.key")
+            storePassword "101010"
+            keyAlias "perf"
+            keyPassword "101010"
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable profilingEnabled
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
